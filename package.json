@@ -1,0 +1,28 @@
+{
+  "name": "lsif-reader",
+  "version": "0.0.1",
+  "description": "TypeScript library for reading LSIF data",
+  "main": "dist/lib.js",
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "npm run build",
+    "sample:gen": "lsif tsc -p ./tsconfig.json --stdout > sample/sample.json",
+    "sample:run": "ts-node sample/sample.ts",
+    "sample": "npm run sample:gen && npm run sample:run"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/semver": "^7.3.9",
+    "lsif": "^0.5.6",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "create-hash": "^1.2.0",
+    "lsif-protocol": "^0.5.3",
+    "semver": "^7.3.5",
+    "vscode-languageserver-types": "^3.16.0",
+    "vscode-uri": "^3.0.2"
+  }
+}
