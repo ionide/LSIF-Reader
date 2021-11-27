@@ -12,13 +12,12 @@ let transformerFactory = (workspaceUri: string): UriTransformer => {
             let wu = URI.parse(workspaceUri).fsPath
             let joined = path.join(wu, uri).replace("\\", "/")
             let nu = URI.file(joined).toString(true)
-            console.log("TO_DATABASE", workspaceUri, uri, nu)
 
             return nu
         },
         fromDatabase: (uri) => {
-            console.log("FROM_DATABASE", workspaceUri, uri)
-            return uri
+            let result = path.relative(workspaceUri, uri).replace("\\", "/")
+            return result
         },
     }
 }
@@ -31,3 +30,6 @@ console.log(result)
 
 let hoverResult = r.hover(uri, { line: 776, character: 24 })
 console.log(hoverResult)
+
+let referencesResult = r.references(uri, { line: 776, character: 24 }, { includeDeclaration: true })
+console.log(referencesResult)
