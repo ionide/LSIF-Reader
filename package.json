@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "prepublish": "npm run build",
+    "lsif": "lsif tsc -p ./tsconfig.json --stdout > dist/index.lsif",
     "sample:gen": "lsif tsc -p ./tsconfig.json --stdout > sample/sample.json",
     "sample:run": "ts-node sample/sample.ts",
     "sample": "npm run sample:gen && npm run sample:run"
