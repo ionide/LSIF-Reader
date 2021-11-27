@@ -1,4 +1,4 @@
-import { LsifReader, noopTransformer } from "../src/lib"
+import { LsifReader, noopTransformer } from "../src/reader"
 import * as fs from "fs"
 
 let r = new LsifReader()

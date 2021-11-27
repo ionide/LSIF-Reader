@@ -1,6 +1,8 @@
+node_modules
 .github
 .vscode
 sample
 .prettierrc
 tsconfig.json
 src
+*.tgz
