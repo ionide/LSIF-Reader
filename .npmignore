@@ -6,3 +6,4 @@ sample
 tsconfig.json
 src
 *.tgz
+*.lsif

@@ -33,4 +33,4 @@ jobs:
           default_author: github_actions
           message: "Update LSIF index"
           branch: lsif-index
-          add: "dist/*.lsif --force"
+          add: "*.lsif --force"
