@@ -1,5 +1,3 @@
-import * as createHash from "create-hash"
-
 import * as lsp from "vscode-languageserver-types"
 import {
     Id,
@@ -100,14 +98,25 @@ interface ResultPath<T> {
     result: { value: T; moniker: Moniker | undefined } | undefined
 }
 
+function hashCode(s: string): string {
+    var hash = 0
+    if (s.length == 0) {
+        return hash.toString()
+    }
+    for (var i = 0; i < s.length; i++) {
+        var char = s.charCodeAt(i)
+        hash = (hash << 5) - hash + char
+        hash = hash & hash // Convert to 32bit integer
+    }
+    return hash.toString()
+}
+
 namespace Locations {
     export function makeKey(location: lsp.Location): string {
         const range = location.range
-        return createHash("md5")
-            .update(
-                JSON.stringify({ d: location.uri, sl: range.start.line, sc: range.start.character, el: range.end.line, ec: range.end.character }, undefined, 0)
-            )
-            .digest("base64")
+        return hashCode(
+            JSON.stringify({ d: location.uri, sl: range.start.line, sc: range.start.character, el: range.end.line, ec: range.end.character }, undefined, 0)
+        )
     }
 }
 
@@ -241,9 +250,7 @@ export class LsifReader {
                 break
             case VertexLabels.moniker:
                 if (vertex.kind !== MonikerKind.local) {
-                    const key = createHash("md5")
-                        .update(JSON.stringify({ s: vertex.scheme, i: vertex.identifier }, undefined, 0))
-                        .digest("base64")
+                    const key = hashCode(JSON.stringify({ s: vertex.scheme, i: vertex.identifier }, undefined, 0))
                     ;(vertex as Moniker).key = key
                     let values = this.indices.monikers.get(key)
                     if (values === undefined) {
@@ -262,7 +269,7 @@ export class LsifReader {
     private doProcessDocument(document: Document): void {
         const contents = document.contents !== undefined ? document.contents : "No content provided."
         this.vertices.documents.set(document.id, document)
-        const hash = createHash("md5").update(contents).digest("base64")
+        const hash = hashCode(contents)
         this.indices.contents.set(hash, contents)
 
         let value = this.indices.documents.get(document.uri)
