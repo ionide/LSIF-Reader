@@ -22,8 +22,6 @@
   "dependencies": {
     "create-hash": "^1.2.0",
     "lsif-protocol": "^0.5.3",
-    "semver": "^7.3.5",
-    "vscode-languageserver-types": "^3.16.0",
-    "vscode-uri": "^3.0.2"
+    "vscode-languageserver-types": "^3.16.0"
   }
 }

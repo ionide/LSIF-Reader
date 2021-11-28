@@ -28,8 +28,8 @@ let uri = "src/reader.ts"
 let result = r.documentSymbols(uri)
 console.log(result)
 
-let hoverResult = r.hover(uri, { line: 776, character: 24 })
+let hoverResult = r.hover(uri, { line: 775, character: 24 })
 console.log(hoverResult)
 
-let referencesResult = r.references(uri, { line: 776, character: 24 }, { includeDeclaration: true })
+let referencesResult = r.references(uri, { line: 775, character: 24 }, { includeDeclaration: true })
 console.log(referencesResult)

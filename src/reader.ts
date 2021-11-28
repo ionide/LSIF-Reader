@@ -1,6 +1,4 @@
-import { URI } from "vscode-uri"
 import * as createHash from "create-hash"
-import * as SemVer from "semver"
 
 import * as lsp from "vscode-languageserver-types"
 import {
@@ -115,7 +113,7 @@ namespace Locations {
 
 export class LsifReader {
     private version: string | undefined
-    private workspaceRoot!: URI
+    private workspaceRoot!: string
     private activeGroup: Id | undefined
     private activeProject: Id | undefined
     private uriTransformer!: UriTransformer
@@ -183,10 +181,10 @@ export class LsifReader {
         if (this.version === undefined) {
             throw new Error("No version found.")
         } else {
-            const semVer = SemVer.parse(this.version)
-            if (!semVer) {
-                throw new Error(`No valid semantic version string. The version is: ${this.version}`)
-            }
+            // const semVer = SemVer.parse(this.version)
+            // if (!semVer) {
+            //     throw new Error(`No valid semantic version string. The version is: ${this.version}`)
+            // }
             // const range: SemVer.Range = new SemVer.Range(">0.5.99 <=0.6.0-next.4")
             // range.includePrerelease = true
             // if (!SemVer.satisfies(semVer, range)) {
@@ -197,7 +195,7 @@ export class LsifReader {
     }
 
     private initialize(transformerFactory: (workspaceRoot: string) => UriTransformer): void {
-        const workspaceRoot = this.getWorkspaceRoot().toString(true)
+        const workspaceRoot = this.getWorkspaceRoot()
         this.uriTransformer = transformerFactory ? transformerFactory(workspaceRoot) : noopTransformer
     }
 
@@ -209,7 +207,7 @@ export class LsifReader {
         return this.uriTransformer.fromDatabase(uri)
     }
 
-    public getWorkspaceRoot(): URI {
+    public getWorkspaceRoot(): string {
         return this.workspaceRoot
     }
 
@@ -222,7 +220,7 @@ export class LsifReader {
                 this.version = vertex.version
                 break
             case VertexLabels.group:
-                this.workspaceRoot = URI.parse(vertex.rootUri)
+                this.workspaceRoot = vertex.rootUri
                 break
             case VertexLabels.project:
                 this.vertices.projects.set(vertex.id, vertex)
