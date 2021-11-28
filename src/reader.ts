@@ -113,7 +113,7 @@ namespace Locations {
 
 export class LsifReader {
     private version: string | undefined
-    private workspaceRoot!: string
+    private workspaceRoot: string | undefined
     private activeGroup: Id | undefined
     private activeProject: Id | undefined
     private uriTransformer!: UriTransformer
@@ -160,7 +160,7 @@ export class LsifReader {
         }
     }
 
-    public load(content: string, transformerFactory: (workspaceRoot: string) => UriTransformer) {
+    public load(content: string, transformerFactory: (workspaceRoot: string | undefined) => UriTransformer) {
         content.split("\n").forEach((line) => {
             if (!line || line.length === 0) {
                 return
@@ -175,9 +175,9 @@ export class LsifReader {
                     break
             }
         })
-        if (this.workspaceRoot === undefined) {
-            throw new Error("No project root provided.")
-        }
+        // if (this.workspaceRoot === undefined) {
+        //     throw new Error("No project root provided.")
+        // }
         if (this.version === undefined) {
             throw new Error("No version found.")
         } else {
@@ -194,7 +194,7 @@ export class LsifReader {
         this.initialize(transformerFactory)
     }
 
-    private initialize(transformerFactory: (workspaceRoot: string) => UriTransformer): void {
+    private initialize(transformerFactory: (workspaceRoot: string | undefined) => UriTransformer): void {
         const workspaceRoot = this.getWorkspaceRoot()
         this.uriTransformer = transformerFactory ? transformerFactory(workspaceRoot) : noopTransformer
     }
@@ -207,7 +207,7 @@ export class LsifReader {
         return this.uriTransformer.fromDatabase(uri)
     }
 
-    public getWorkspaceRoot(): string {
+    public getWorkspaceRoot(): string | undefined {
         return this.workspaceRoot
     }
 
@@ -218,6 +218,8 @@ export class LsifReader {
         switch (vertex.label) {
             case VertexLabels.metaData:
                 this.version = vertex.version
+                //temp hack for rust-analyzer?
+                this.workspaceRoot = (vertex as any).projectRoot
                 break
             case VertexLabels.group:
                 this.workspaceRoot = vertex.rootUri
