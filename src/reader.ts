@@ -506,7 +506,11 @@ export class LsifReader {
         return this.findTargets(uri, position, this.out.definition)
     }
 
-    private findTargets<T extends DefinitionResult | DeclarationResult>(
+    public typeDefinitions(uri: string, position: lsp.Position): lsp.Location | lsp.Location[] | undefined {
+        return this.findTargets(uri, position, this.out.typeDefinition)
+    }
+
+    private findTargets<T extends DefinitionResult | DeclarationResult | TypeDefinitionResult>(
         uri: string,
         position: lsp.Position,
         edges: Map<Id, T>
@@ -679,12 +683,14 @@ export class LsifReader {
         }
     }
 
-    private item(value: DefinitionResult | DeclarationResult): Range[]
+    private item(value: DefinitionResult | DeclarationResult | TypeDefinitionResult): Range[]
     private item(value: ReferenceResult): ItemTarget[]
-    private item(value: DeclarationResult | DefinitionResult | ReferenceResult): Range[] | ItemTarget[] | undefined {
+    private item(value: DeclarationResult | DefinitionResult | TypeDefinitionResult | ReferenceResult): Range[] | ItemTarget[] | undefined {
         if (value.label === "declarationResult") {
             return this.out.item.get(value.id) as Range[]
         } else if (value.label === "definitionResult") {
+            return this.out.item.get(value.id) as Range[]
+        } else if (value.label === "typeDefinitionResult") {
             return this.out.item.get(value.id) as Range[]
         } else if (value.label === "referenceResult") {
             return this.out.item.get(value.id) as ItemTarget[]
