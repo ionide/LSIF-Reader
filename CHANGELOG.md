@@ -4,7 +4,7 @@ All notable changes to the "Discover Panel" extension will be documented in this
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [unreleased]
+## [0.1.0] - 06.12.2021
 
 ### Added
 

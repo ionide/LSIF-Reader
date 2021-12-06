@@ -1,6 +1,6 @@
 {
   "name": "@ionide/lsif-reader",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "TypeScript library for reading LSIF data",
   "main": "dist/reader.js",
   "scripts": {
